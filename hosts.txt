@@ -1,0 +1,49 @@
+[OSEv3:children]
+nodes
+nfs
+masters
+etcd
+
+[OSEv3:vars]
+openshift_master_cluster_public_hostname=13.251.62.2.xip.io
+openshift_master_default_subdomain=apps.13.251.62.2.xip.io
+ansible_ssh_user=root
+openshift_master_cluster_hostname=13.251.62.2.xip.io
+openshift_override_hostname_check=true
+openshift_hostname_check=false
+deployment_type=openshift-enterprise
+openshift_master_identity_providers=[{'name': 'htpasswd_auth','login': 'true', 'challenge': 'true','kind': 'HTPasswdPasswordIdentityProvider','filename': '/etc/origin/master/users.htpasswd'}]
+openshift_docker_options="--insecure-registry=172.30.0.0/16 --selinux-enabled --log-opt max-size=1M --log-opt max-file=3"
+openshift_disable_check=memory_availability,disk_availability,docker_storage
+ansible_service_broker_local_registry_whitelist=['.*-apb$']
+openshift_hosted_etcd_storage_kind=nfs
+openshift_hosted_etcd_storage_nfs_options="*(rw,root_squash,sync,no_wdelay)"
+openshift_hosted_etcd_storage_nfs_directory=/opt/osev3-etcd 
+openshift_hosted_etcd_storage_volume_name=etcd-vol2 
+openshift_hosted_etcd_storage_access_modes=["ReadWriteOnce"]
+openshift_hosted_etcd_storage_volume_size=10Gi
+openshift_hosted_etcd_storage_labels={'storage': 'etcd'}
+openshift_metrics_storage_kind=nfs
+openshift_metrics_storage_access_modes=['ReadWriteOnce']
+openshift_metrics_storage_nfs_directory=/exports
+openshift_metrics_storage_nfs_options='*(rw,root_squash)'
+openshift_metrics_storage_volume_name=metrics
+openshift_metrics_storage_volume_size=10Gi
+openshift_hosted_registry_storage_kind=nfs
+openshift_hosted_registry_storage_access_modes=['ReadWriteMany']
+openshift_hosted_registry_storage_nfs_directory=/exports
+openshift_hosted_registry_storage_nfs_options='*(rw,root_squash)'
+openshift_hosted_registry_storage_volume_name=registry
+openshift_hosted_registry_storage_volume_size=10Gi
+
+[nodes]
+13.251.62.2.xip.io  openshift_public_ip=13.251.62.2 openshift_ip=172.31.9.214 openshift_public_hostname=13.251.62.2.xip.io openshift_hostname=ip-172-31-9-214.ap-southeast-1.compute.internal openshift_node_labels="{'region': 'infra'}" openshift_schedulable=True ansible_connection=local
+
+[masters]
+13.251.62.2.xip.io  openshift_public_ip=13.251.62.2 openshift_ip=172.31.9.214 openshift_public_hostname=13.251.62.2.xip.io openshift_hostname=ip-172-31-9-214.ap-southeast-1.compute.internal ansible_connection=local
+
+[nfs]
+ip-172-31-9-214.ap-southeast-1.compute.internal
+
+[etcd]
+13.251.62.2.xip.io  openshift_public_ip=13.251.62.2 openshift_ip=172.31.9.214 openshift_public_hostname=13.251.62.2.xip.io openshift_hostname=ip-172-31-9-214.ap-southeast-1.compute.internal ansible_connection=local
